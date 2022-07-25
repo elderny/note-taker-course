@@ -63,6 +63,7 @@ const addNote = () => {
     let arr = localStorage.notes ? JSON.parse(localStorage.notes) : []
     arr.push(values)
     localStorage.setItem('notes', JSON.stringify(arr))
+    if(noteBody.innerHTML.includes('<h4>'))noteBody.innerHTML = ''
     addNoteHTML(values.title, values.note, values.id)
     alertPush(1, `Note with title: ${values.title} has been added`)
     emptyVals()
