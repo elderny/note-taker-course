@@ -5,7 +5,7 @@ const
     addAudio = new Audio('add.wav'),
     deleteAudio = new Audio('delete.wav')
 
-let values = { title: '', note: '', id: GenId() }
+let values = { title: '', note: '', id: GenId() },empty=false
 
 const addNoteHTML = (title, note, id) => {
     noteBody.innerHTML += `
@@ -16,7 +16,11 @@ const addNoteHTML = (title, note, id) => {
 const getNotes = () => {
     noteBody.innerHTML = ''
     let arr = localStorage.notes ? JSON.parse(localStorage.notes) : []
-    if (!arr.length) noteBody.innerHTML = '<h4 class="text-muted">No Notes to show</h4>'
+    if (!arr.length) {
+        empty=true
+        return noteBody.innerHTML = '<h4 class="text-muted">No Notes to show</h4>'
+    }
+    empty=false
     arr.forEach(e => addNoteHTML(e.title, e.note, e.id))
 }
 // Show notes on page load
@@ -63,9 +67,10 @@ const addNote = () => {
     let arr = localStorage.notes ? JSON.parse(localStorage.notes) : []
     arr.push(values)
     localStorage.setItem('notes', JSON.stringify(arr))
-    if(noteBody.innerHTML.includes('<h4'))noteBody.innerHTML = ''
+    if(empty)noteBody.innerHTML = ''
     addNoteHTML(values.title, values.note, values.id)
     alertPush(1, `Note with title: ${values.title} has been added`)
+    empty=false
     emptyVals()
     audioManager(true)
 }
